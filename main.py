@@ -51,7 +51,7 @@ class KNN:
         total_value = float(0)
         for x, y in zip(knn.values, knn.indices):
             if x == 0:
-                weight = k/3
+                weight = k*10
             else:
                 weight = 1 - 1 / (1 + np.exp(-(10 * float(x)-4)))
             print(str(int(y)) + ": " + self.labels[y])
@@ -60,20 +60,15 @@ class KNN:
             total_value += hv[1] * weight
             total_weight += weight
             results.append([weight, hue])
-        print(results)
         # compute weighted-average hue
 
         points = list(map(lambda i: [i[0] * np.cos(i[1]), i[0] * np.sin(i[1])], results)) # converts hue into coordinates on color wheel
-        print(points)
         point_sum = [sum(x) for x in zip(*points)]
-        print("balls")
-        print(point_sum)
         average_point = [
             point_sum[0] / k,
             point_sum[1] / k
         ]
-        print(average_point)
-        average_hue = (np.arctan2(average_point[1],average_point[0]) * 180 / np.pi)
+        average_hue = (np.arctan2(average_point[1], average_point[0]) * 180 / np.pi)
         if average_hue < 0:
             average_hue = 360 + average_hue
         average_value = total_value / total_weight
@@ -97,7 +92,7 @@ if len(device_ports) > 1:
 connection = serial.Serial(device_ports[0])
 
 SCOPE = 'user-read-currently-playing user-modify-playback-state'
-CLIENT_ID = 'd66ba13f375a46879267cb812a06724f'
+CLIENT_ID = client_id
 REDIRECT_URI = 'https://localhost/'
 
 auth = spotipy.oauth2.SpotifyPKCE(client_id=CLIENT_ID, redirect_uri=REDIRECT_URI, scope=SCOPE)
@@ -121,8 +116,6 @@ while True:
             current_song = item["name"]
             track = sp.audio_features(item["id"])[0]
             feature_data = np.array([float(track[i]) for i in KNN.included_features])
-            for i in KNN.included_features:
-                print(i + ": {0}".format(track[i]))
             feature_data = torch.Tensor(feature_data).view(1, len(KNN.included_features))
 
             final_color = model.eval(feature_data)
