@@ -1,3 +1,5 @@
+// I won't lie I generated this file with chatGPT. What good is technology if we dont use it right?
+
 #include <FastLED.h>
 
 // Define the number of LEDs in your strip
