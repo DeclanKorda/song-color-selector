@@ -1,4 +1,7 @@
 # song-color-selector
+
+This repository is depreciated. Link to new repository: https://github.com/DeclanKorda/song_to_color
+
 Python script which changes the color of your led lights to match the vibe of the song playing on your spotify.
 
 Uses a KNN algorithmn and a dataset of spotify audio features from about 500 songs which I have classified as either red, blue, green, cyan, magenta, yellow, teal, orange, purple, sky blue, yellow-green, or pink.
